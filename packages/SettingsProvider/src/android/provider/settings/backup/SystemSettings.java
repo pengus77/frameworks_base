@@ -87,5 +87,7 @@ public class SystemSettings {
         Settings.System.NOTIFICATION_LIGHT_PULSE,
         Settings.System.NOTIFICATION_HEADERS,
         Settings.System.VOLUME_BUTTON_MUSIC_CONTROL,
+        Settings.System.TORCH_LONG_PRESS_POWER_GESTURE,
+        Settings.System.TORCH_LONG_PRESS_POWER_TIMEOUT,
     };
 }
