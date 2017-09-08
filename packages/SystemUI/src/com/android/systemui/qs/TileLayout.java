@@ -2,8 +2,11 @@ package com.android.systemui.qs;
 
 import static com.android.systemui.util.Utils.useQsMediaPlayer;
 
+import android.content.ContentResolver;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.AttributeSet;
 import android.view.View;
@@ -111,8 +114,20 @@ public class TileLayout extends ViewGroup implements QSTileLayout {
 
     public boolean updateResources() {
         final Resources res = mContext.getResources();
-        mResourceColumns = Math.max(1, res.getInteger(R.integer.quick_settings_num_columns));
+        final int defaultColumns = Math.max(1, res.getInteger(R.integer.quick_settings_num_columns));
         mCellHeight = mContext.getResources().getDimensionPixelSize(R.dimen.qs_tile_height);
+        final ContentResolver resolver = mContext.getContentResolver();
+
+        if (res.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            mResourceColumns = Settings.System.getIntForUser(resolver,
+                    Settings.System.QS_COLUMNS_PORTRAIT, defaultColumns,
+                    UserHandle.USER_CURRENT);
+        } else {
+            mResourceColumns = Settings.System.getIntForUser(resolver,
+                    Settings.System.QS_COLUMNS_LANDSCAPE, defaultColumns,
+                    UserHandle.USER_CURRENT);
+        }
+
         mCellMarginHorizontal = res.getDimensionPixelSize(R.dimen.qs_tile_margin_horizontal);
         mCellMarginVertical= res.getDimensionPixelSize(R.dimen.qs_tile_margin_vertical);
         mCellMarginTop = res.getDimensionPixelSize(R.dimen.qs_tile_margin_top);
@@ -175,11 +190,16 @@ public class TileLayout extends ViewGroup implements QSTileLayout {
                 // Add the cell margin in order to divide easily by the height + the margin below
                 + mCellMarginVertical;
         final int previousRows = mRows;
-        mRows = availableHeight / (mCellHeight + mCellMarginVertical);
-        if (mRows < mMinRows) {
-            mRows = mMinRows;
-        } else if (mRows >= mMaxAllowedRows) {
-            mRows = mMaxAllowedRows;
+        // we aren't introducing any delay due to the Settings provider call here, because PagedTileLayout.onMeasure
+        // calls updateMaxRows only if the panel height is changed or if updateResources has been triggered
+        if (mContext.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            mRows = Settings.System.getIntForUser(mContext.getContentResolver(),
+                    Settings.System.QS_ROWS_PORTRAIT, 2,
+                    UserHandle.USER_CURRENT);
+        } else {
+            mRows = Settings.System.getIntForUser(mContext.getContentResolver(),
+                        Settings.System.QS_ROWS_LANDSCAPE, 1,
+                        UserHandle.USER_CURRENT);
         }
         if (mRows > (tilesCount + mColumns - 1) / mColumns) {
             mRows = (tilesCount + mColumns - 1) / mColumns;
