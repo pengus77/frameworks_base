@@ -21,6 +21,7 @@ import com.android.internal.policy.IKeyguardDismissCallback;
 import com.android.internal.policy.IShortcutService;
 
 import android.app.IAssistDataReceiver;
+import android.content.Intent;
 import android.content.res.CompatibilityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -386,6 +387,21 @@ interface IWindowManager
      * Called by System UI to notify Window Manager to hide transient bars.
      */
     oneway void hideTransientBars(int displayId);
+
+    /**
+    * When set to {@code true} the system bars will always be shown. This is true even if an app
+    * requests to be fullscreen by setting the system ui visibility flags. The
+    * functionality was added for the automotive case as a way to guarantee required content stays
+    * on screen at all times.
+    *
+    * @hide
+    */
+    oneway void setForceShowSystemBars(boolean show);
+
+    /**
+     * Send some ActionHandler commands to WindowManager.
+     */
+    void sendCustomAction(in Intent intent);
 
     /**
      * Called by System UI to notify of changes to the visibility of Recents.
