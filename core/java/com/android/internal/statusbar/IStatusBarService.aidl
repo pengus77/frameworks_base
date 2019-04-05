@@ -118,4 +118,8 @@ interface IStatusBarService
 
     // Start PI PIE 3.0
     void toggleOrientationListener(boolean enable);
+
+    // Used to show or hide in display fingerprint view
+    void showInDisplayFingerprintView();
+    void hideInDisplayFingerprintView();
 }
