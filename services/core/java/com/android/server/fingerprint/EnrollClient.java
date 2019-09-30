@@ -29,8 +29,6 @@ import com.android.internal.logging.MetricsLogger;
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
 import com.android.internal.statusbar.IStatusBarService;
 
-import lineageos.app.LineageContextConstants;
-
 import vendor.lineage.biometrics.fingerprint.inscreen.V1_0.IFingerprintInscreen;
 
 import java.util.Arrays;
@@ -53,7 +51,7 @@ public abstract class EnrollClient extends ClientMonitor {
         mStatusBarService = statusBarService;
 
         PackageManager packageManager = context.getPackageManager();
-        mHasFod = packageManager.hasSystemFeature(LineageContextConstants.Features.FOD);
+        mHasFod = packageManager.hasSystemFeature(PackageManager.FEATURE_FOD);
     }
 
     @Override

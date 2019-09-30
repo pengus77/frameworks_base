@@ -77,8 +77,6 @@ import com.android.internal.util.DumpUtils;
 import com.android.server.SystemServerInitThreadPool;
 import com.android.server.SystemService;
 
-import lineageos.app.LineageContextConstants;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -275,7 +273,7 @@ public class FingerprintService extends SystemService implements IHwBinder.Death
                 com.android.internal.R.bool.config_cleanupUnusedFingerprints);
 
         PackageManager packageManager = context.getPackageManager();
-        mHasFod = packageManager.hasSystemFeature(LineageContextConstants.Features.FOD);
+        mHasFod = packageManager.hasSystemFeature(PackageManager.FEATURE_FOD);
     }
 
     @Override

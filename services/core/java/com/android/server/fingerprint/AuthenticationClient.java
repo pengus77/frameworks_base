@@ -34,8 +34,6 @@ import com.android.internal.logging.MetricsLogger;
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
 import com.android.internal.statusbar.IStatusBarService;
 
-import lineageos.app.LineageContextConstants;
-
 import vendor.lineage.biometrics.fingerprint.inscreen.V1_0.IFingerprintInscreen;
 
 /**
@@ -109,7 +107,7 @@ public abstract class AuthenticationClient extends ClientMonitor {
                 com.android.internal.R.string.config_keyguardComponent)).getPackageName();
 
         PackageManager packageManager = context.getPackageManager();
-        mHasFod = packageManager.hasSystemFeature(LineageContextConstants.Features.FOD);
+        mHasFod = packageManager.hasSystemFeature(PackageManager.FEATURE_FOD);
     }
 
     @Override

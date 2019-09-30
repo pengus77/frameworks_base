@@ -1654,6 +1654,14 @@ public abstract class PackageManager {
      */
     public static final long MAXIMUM_VERIFICATION_TIMEOUT = 60*60*1000;
 
+    /** 
+     * Feature for {@link PackageManager#getSystemAvailableFeatures} and
+     * {@link PackageManager#hasSystemFeature}: The device includes the Lineage
+     * fingerprint in screen utilized by the lineage sdk.
+     */
+    @SdkConstant(SdkConstantType.FEATURE)
+    public static final String FEATURE_FOD = "vendor.lineage.biometrics.fingerprint.inscreen";
+
     /**
      * Feature for {@link #getSystemAvailableFeatures} and {@link #hasSystemFeature}: The device's
      * audio pipeline is low-latency, more suitable for audio applications sensitive to delays or

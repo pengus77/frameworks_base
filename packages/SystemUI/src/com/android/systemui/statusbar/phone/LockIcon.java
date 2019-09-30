@@ -32,8 +32,6 @@ import com.android.systemui.statusbar.KeyguardAffordanceView;
 import com.android.systemui.statusbar.policy.AccessibilityController;
 import com.android.systemui.statusbar.policy.UserInfoController.OnUserInfoChangedListener;
 
-import lineageos.app.LineageContextConstants;
-
 /**
  * Manages the different states and animations of the unlock icon.
  */
@@ -71,7 +69,7 @@ public class LockIcon extends KeyguardAffordanceView implements OnUserInfoChange
         mUnlockMethodCache = UnlockMethodCache.getInstance(context);
 
         PackageManager packageManager = context.getPackageManager();
-        mHasFod = packageManager.hasSystemFeature(LineageContextConstants.Features.FOD);
+        mHasFod = packageManager.hasSystemFeature(PackageManager.FEATURE_FOD);
     }
 
     @Override
