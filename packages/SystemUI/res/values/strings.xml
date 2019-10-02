@@ -2251,4 +2251,9 @@
          app for debugging. Will not be seen by users. [CHAR LIMIT=20] -->
     <string name="heap_dump_tile_name">Dump SysUI Heap</string>
 
+    <!-- LTE QS Tile -->
+    <string name="qs_lte_label">LTE</string>
+    <string name="lte_on">LTE On</string>
+    <string name="lte_off">LTE Off</string>
+
 </resources>

@@ -5880,6 +5880,17 @@ public class TelephonyManager {
         return getCdmaMin(getSubId());
     }
 
+    /**
+     * {@hide}
+     */
+    public void toggleLTE(boolean on) {
+        try {
+            getITelephony().toggleLTE(on);
+        } catch (RemoteException e) {
+            //Silently fail
+        }
+    }
+
     /** @hide */
     @SystemApi
     @RequiresPermission(android.Manifest.permission.MODIFY_PHONE_STATE)
