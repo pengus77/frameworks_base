@@ -8000,6 +8000,9 @@ public final class Settings {
 
         private static final Validator VOLUME_LINK_NOTIFICATION_VALIDATOR = BOOLEAN_VALIDATOR;
 
+        public static final String HEADSET_STARTS_MUSIC_PLAYER = "headset_starts_music_player";
+        private static final Validator HEADSET_STARTS_MUSIC_PLAYER_VALIDATOR = BOOLEAN_VALIDATOR;
+
         /**
          * This are the settings to be backed up.
          *
@@ -8104,6 +8107,7 @@ public final class Settings {
             LOCK_SCREEN_ALLOW_PRIVATE_NOTIFICATIONS,
             LOCK_SCREEN_SHOW_NOTIFICATIONS,
             VOLUME_LINK_NOTIFICATION,
+            HEADSET_STARTS_MUSIC_PLAYER
         };
 
         /**
@@ -8253,6 +8257,7 @@ public final class Settings {
             VALIDATORS.put(LOCK_SCREEN_ALLOW_PRIVATE_NOTIFICATIONS, BOOLEAN_VALIDATOR);
             VALIDATORS.put(LOCK_SCREEN_SHOW_NOTIFICATIONS, BOOLEAN_VALIDATOR);
             VALIDATORS.put(VOLUME_LINK_NOTIFICATION, VOLUME_LINK_NOTIFICATION_VALIDATOR);
+            VALIDATORS.put(HEADSET_STARTS_MUSIC_PLAYER, HEADSET_STARTS_MUSIC_PLAYER_VALIDATOR);
         }
 
         /**
@@ -11424,6 +11429,7 @@ public final class Settings {
         public static final String DOCK_AUDIO_MEDIA_ENABLED = "dock_audio_media_enabled";
 
         private static final Validator DOCK_AUDIO_MEDIA_ENABLED_VALIDATOR = BOOLEAN_VALIDATOR;
+
 
         /**
          * The surround sound formats AC3, DTS or IEC61937 are
