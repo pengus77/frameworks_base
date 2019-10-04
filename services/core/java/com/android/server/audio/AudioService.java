@@ -705,6 +705,9 @@ public class AudioService extends IAudioService.Stub
         }
     };
 
+    private boolean mOpenPlayer;
+    private boolean mOpenPlayerBt;
+
     ///////////////////////////////////////////////////////////////////////////
     // Construction
     ///////////////////////////////////////////////////////////////////////////
@@ -727,6 +730,12 @@ public class AudioService extends IAudioService.Stub
 
         mVibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         mHasVibrator = mVibrator == null ? false : mVibrator.hasVibrator();
+
+	mOpenPlayer = Settings.Secure.getIntForUser(mContext.getContentResolver(),
+                Settings.Secure.HEADSET_STARTS_MUSIC_PLAYER, 0, UserHandle.USER_CURRENT) != 0;
+
+	mOpenPlayerBt = Settings.Secure.getIntForUser(mContext.getContentResolver(),
+                Settings.Secure.BT_STARTS_MUSIC_PLAYER, 0, UserHandle.USER_CURRENT) != 0;
 
         // Initialize volume
         int maxCallVolume = SystemProperties.getInt("ro.config.vc_call_vol_steps", -1);
@@ -3778,6 +3787,16 @@ public class AudioService extends IAudioService.Stub
                 result |= handleDeviceConnection(isActive, outDeviceType, address, btDeviceName);
             }
         }
+
+        if (mOpenPlayerBt && isActive) {
+	    for (int outDeviceType : outDeviceTypes) {
+		if (outDeviceType != AudioSystem.DEVICE_OUT_BLUETOOTH_SCO_CARKIT) {
+            	    startMusicPlayer();
+		    break;
+		}
+	    }
+	}
+
         // handleDeviceConnection() && result to make sure the method get executed
         result = handleDeviceConnection(isActive, inDevice, address, btDeviceName) && result;
         return result;
@@ -5785,6 +5804,12 @@ public class AudioService extends IAudioService.Stub
                     mContentResolver, Settings.Global.ENCODED_SURROUND_OUTPUT_ENABLED_FORMATS);
             mContentResolver.registerContentObserver(Settings.Global.getUriFor(
                     Settings.Global.ENCODED_SURROUND_OUTPUT_ENABLED_FORMATS), false, this);
+
+	    mContentResolver.registerContentObserver(Settings.Secure.getUriFor(
+                    Settings.Secure.HEADSET_STARTS_MUSIC_PLAYER), false, this);
+
+	    mContentResolver.registerContentObserver(Settings.Secure.getUriFor(
+                    Settings.Secure.BT_STARTS_MUSIC_PLAYER), false, this);
         }
 
         @Override
@@ -5815,6 +5840,13 @@ public class AudioService extends IAudioService.Stub
                     updateStreamVolumeAlias(true, TAG);
                 }
             }
+
+	    mOpenPlayer = Settings.Secure.getIntForUser(mContext.getContentResolver(),
+                    Settings.Secure.HEADSET_STARTS_MUSIC_PLAYER, 0, UserHandle.USER_CURRENT) != 0;;
+
+            mOpenPlayerBt = Settings.Secure.getIntForUser(mContext.getContentResolver(),
+                    Settings.Secure.BT_STARTS_MUSIC_PLAYER, 0, UserHandle.USER_CURRENT) != 0;;
+
         }
 
         private void updateEncodedSurroundOutput() {
@@ -6270,11 +6302,9 @@ public class AudioService extends IAudioService.Stub
     }
 
     private void startMusicPlayer() {
-        boolean launchPlayer = Settings.Secure.getIntForUser(mContext.getContentResolver(),
-                Settings.Secure.HEADSET_STARTS_MUSIC_PLAYER, 0, UserHandle.USER_CURRENT) != 0;
         TelecomManager tm = (TelecomManager) mContext.getSystemService(Context.TELECOM_SERVICE);
 
-        if (launchPlayer && !tm.isInCall()) {
+        if (!tm.isInCall()) {
             try {
                 Intent playerIntent = new Intent(Intent.ACTION_MAIN);
                 playerIntent.addCategory(Intent.CATEGORY_APP_MUSIC);
@@ -6292,13 +6322,13 @@ public class AudioService extends IAudioService.Stub
 
         if (device == AudioSystem.DEVICE_OUT_WIRED_HEADSET) {
             connType = AudioRoutesInfo.MAIN_HEADSET;
-	    if (state == 1) {
+	    if (mOpenPlayer && state == 1) {
                 startMusicPlayer();
             }
         } else if (device == AudioSystem.DEVICE_OUT_WIRED_HEADPHONE ||
                    device == AudioSystem.DEVICE_OUT_LINE) {
             connType = AudioRoutesInfo.MAIN_HEADPHONES;
-	    if (state == 1) {
+	    if (mOpenPlayer && state == 1) {
                 startMusicPlayer();
             }
         } else if (device == AudioSystem.DEVICE_OUT_HDMI ||

@@ -89,7 +89,6 @@
     <bool name="def_lockscreen_disabled">false</bool>
     <bool name="def_device_provisioned">false</bool>
     <integer name="def_dock_audio_media_enabled">1</integer>
-    <bool name="def_headset_starts_music_player">false</bool>
 
     <!-- Notifications use ringer volume -->
     <bool name="def_notifications_use_ring_volume">true</bool>
@@ -218,4 +217,8 @@
 
     <!-- Default for Settings.System.VIBRATE_WHEN_RINGING -->
     <bool name="def_vibrate_when_ringing">false</bool>
+
+    <bool name="def_headset_starts_music_player">false</bool>
+    <bool name="def_bt_starts_music_player">false</bool>
+
 </resources>
