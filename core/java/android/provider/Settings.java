@@ -8012,6 +8012,9 @@ public final class Settings {
 	public static final String QUICK_UNLOCK = "quick_unlock";
         private static final Validator QUICK_UNLOCK_VALIDATOR = BOOLEAN_VALIDATOR;
 
+	public static final String CHARGE_INFO = "charge_info";
+        private static final Validator CHARGE_INFO_VALIDATOR = BOOLEAN_VALIDATOR;
+
         /**
          * This are the settings to be backed up.
          *
@@ -8119,7 +8122,8 @@ public final class Settings {
             HEADSET_STARTS_MUSIC_PLAYER,
             BT_STARTS_MUSIC_PLAYER,
 	    SILENT_SCREENSHOT,
-	    QUICK_UNLOCK
+	    QUICK_UNLOCK,
+	    CHARGE_INFO
         };
 
         /**
@@ -8273,6 +8277,7 @@ public final class Settings {
             VALIDATORS.put(BT_STARTS_MUSIC_PLAYER, BT_STARTS_MUSIC_PLAYER_VALIDATOR);
             VALIDATORS.put(SILENT_SCREENSHOT, SILENT_SCREENSHOT_VALIDATOR);
             VALIDATORS.put(QUICK_UNLOCK, QUICK_UNLOCK_VALIDATOR);
+            VALIDATORS.put(CHARGE_INFO, CHARGE_INFO_VALIDATOR);
         }
 
         /**
