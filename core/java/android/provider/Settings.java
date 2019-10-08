@@ -8009,6 +8009,9 @@ public final class Settings {
 	public static final String SILENT_SCREENSHOT = "silent_screenshot";
         private static final Validator SILENT_SCREENSHOT_VALIDATOR = BOOLEAN_VALIDATOR;
 
+	public static final String QUICK_UNLOCK = "quick_unlock";
+        private static final Validator QUICK_UNLOCK_VALIDATOR = BOOLEAN_VALIDATOR;
+
         /**
          * This are the settings to be backed up.
          *
@@ -8115,7 +8118,8 @@ public final class Settings {
             VOLUME_LINK_NOTIFICATION,
             HEADSET_STARTS_MUSIC_PLAYER,
             BT_STARTS_MUSIC_PLAYER,
-	    SILENT_SCREENSHOT
+	    SILENT_SCREENSHOT,
+	    QUICK_UNLOCK
         };
 
         /**
@@ -8268,6 +8272,7 @@ public final class Settings {
             VALIDATORS.put(HEADSET_STARTS_MUSIC_PLAYER, HEADSET_STARTS_MUSIC_PLAYER_VALIDATOR);
             VALIDATORS.put(BT_STARTS_MUSIC_PLAYER, BT_STARTS_MUSIC_PLAYER_VALIDATOR);
             VALIDATORS.put(SILENT_SCREENSHOT, SILENT_SCREENSHOT_VALIDATOR);
+            VALIDATORS.put(QUICK_UNLOCK, QUICK_UNLOCK_VALIDATOR);
         }
 
         /**
