@@ -8015,6 +8015,15 @@ public final class Settings {
 	public static final String CHARGE_INFO = "charge_info";
         private static final Validator CHARGE_INFO_VALIDATOR = BOOLEAN_VALIDATOR;
 
+	public static final String WIFI_ACTIONS = "wifi_actions";
+        private static final Validator WIFI_ACTIONS_VALIDATOR = BOOLEAN_VALIDATOR;
+
+	public static final String WIFI_ACTIONS_2G = "wifi_actions_2g";
+        private static final Validator WIFI_ACTIONS_2G_VALIDATOR = BOOLEAN_VALIDATOR;
+
+	public static final String WIFI_ACTIONS_MOBILE_DATA = "wifi_actions_mobile_data";
+        private static final Validator WIFI_ACTIONS_MOBILE_DATA_VALIDATOR = BOOLEAN_VALIDATOR;
+
         /**
          * This are the settings to be backed up.
          *
@@ -8123,7 +8132,10 @@ public final class Settings {
             BT_STARTS_MUSIC_PLAYER,
 	    SILENT_SCREENSHOT,
 	    QUICK_UNLOCK,
-	    CHARGE_INFO
+	    CHARGE_INFO,
+	    WIFI_ACTIONS,
+	    WIFI_ACTIONS_2G,
+	    WIFI_ACTIONS_MOBILE_DATA
         };
 
         /**
@@ -8278,6 +8290,9 @@ public final class Settings {
             VALIDATORS.put(SILENT_SCREENSHOT, SILENT_SCREENSHOT_VALIDATOR);
             VALIDATORS.put(QUICK_UNLOCK, QUICK_UNLOCK_VALIDATOR);
             VALIDATORS.put(CHARGE_INFO, CHARGE_INFO_VALIDATOR);
+            VALIDATORS.put(WIFI_ACTIONS, WIFI_ACTIONS_VALIDATOR);
+            VALIDATORS.put(WIFI_ACTIONS_2G, WIFI_ACTIONS_2G_VALIDATOR);
+            VALIDATORS.put(WIFI_ACTIONS_MOBILE_DATA, WIFI_ACTIONS_MOBILE_DATA_VALIDATOR);
         }
 
         /**
