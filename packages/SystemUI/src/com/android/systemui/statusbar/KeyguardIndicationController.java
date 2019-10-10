@@ -388,6 +388,9 @@ public class KeyguardIndicationController {
             return mContext.getResources().getString(R.string.keyguard_charged);
         }
 
+	boolean showBatteryInfo = Settings.Secure.getIntForUser(mContext.getContentResolver(),
+            Settings.Secure.CHARGE_INFO, 0, UserHandle.USER_CURRENT) != 0;
+
         // Try fetching charging time from battery stats.
         long chargingTimeRemaining = 0;
         try {
@@ -402,19 +405,37 @@ public class KeyguardIndicationController {
         if (mPowerPluggedInWired) {
             switch (mChargingSpeed) {
                 case KeyguardUpdateMonitor.BatteryStatus.CHARGING_FAST:
-                    chargingId = hasChargingTime
+		    if (showBatteryInfo) {
+			chargingId = hasChargingTime
+			    ? R.string.keyguard_indication_short_charging_time
+			    : R.string.empty;
+		    } else {
+                    	chargingId = hasChargingTime
                             ? R.string.keyguard_indication_charging_time_fast
                             : R.string.keyguard_plugged_in_charging_fast;
+		    }
                     break;
                 case KeyguardUpdateMonitor.BatteryStatus.CHARGING_SLOWLY:
-                    chargingId = hasChargingTime
+		    if (showBatteryInfo) {
+			chargingId = hasChargingTime
+			    ? R.string.keyguard_indication_short_charging_time
+			    : R.string.empty;
+		    } else {
+                    	chargingId = hasChargingTime
                             ? R.string.keyguard_indication_charging_time_slowly
                             : R.string.keyguard_plugged_in_charging_slowly;
+		    }
                     break;
                 default:
-                    chargingId = hasChargingTime
+		    if (showBatteryInfo) {
+			chargingId = hasChargingTime
+			    ? R.string.keyguard_indication_short_charging_time
+			    : R.string.keyguard_plugged_in;
+		    } else {
+                    	chargingId = hasChargingTime
                             ? R.string.keyguard_indication_charging_time
                             : R.string.keyguard_plugged_in;
+		    }
                     break;
             }
         } else {
@@ -424,24 +445,19 @@ public class KeyguardIndicationController {
         }
 
 	String batteryInfo = "";
-        boolean showbatteryInfo = Settings.Secure.getIntForUser(mContext.getContentResolver(),
-            Settings.Secure.CHARGE_INFO, 1, UserHandle.USER_CURRENT) == 1;
-         if (showbatteryInfo) {
+
+        if (showBatteryInfo) {
+	    batteryInfo = "Charging at ";
             if (mChargingCurrent > 0) {
-                batteryInfo = batteryInfo + (mChargingCurrent / 1000) + "mA";
+                batteryInfo += (mChargingCurrent / 1000) + "mA";
             }
-	    /*
             if (mChargingVoltage > 0) {
                 batteryInfo = (batteryInfo == "" ? "" : batteryInfo + " · ") +
                         String.format("%.1f", (mChargingVoltage / 1000 / 1000)) + "V";
             }
-	    */
             if (mTemperature > 0) {
                 batteryInfo = (batteryInfo == "" ? "" : batteryInfo + " · ") +
                         mTemperature / 10 + "°C";
-            }
-            if (batteryInfo != "") {
-                batteryInfo = " (" + batteryInfo + ")";
             }
         }
 
@@ -456,19 +472,27 @@ public class KeyguardIndicationController {
             try {
 		String chargingText = mContext.getResources().getString(chargingId, chargingTimeFormatted,
                         percentage);
-                return chargingText + batteryInfo;
+
+		if (showBatteryInfo)
+                	return batteryInfo + chargingText;
+
+		return chargingText;
             } catch (IllegalFormatConversionException e) {
 		String chargingText =  mContext.getResources().getString(chargingId, chargingTimeFormatted);
-                return chargingText + batteryInfo;
+                return chargingText;
             }
         } else {
             // Same as above
             try {
 		String chargingText =  mContext.getResources().getString(chargingId, percentage);
-                return chargingText + batteryInfo;
+
+		if (showBatteryInfo)
+			return batteryInfo;
+
+                return chargingText;
             } catch (IllegalFormatConversionException e) {
 		String chargingText =  mContext.getResources().getString(chargingId);
-                return chargingText + batteryInfo;
+                return chargingText;
             }
         }
     }
