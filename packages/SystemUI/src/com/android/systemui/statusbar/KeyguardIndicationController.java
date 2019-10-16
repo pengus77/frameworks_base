@@ -474,7 +474,7 @@ public class KeyguardIndicationController {
                         percentage);
 
 		if (showBatteryInfo)
-                	return batteryInfo + chargingText;
+                	return batteryInfo + " · " + chargingText;
 
 		return chargingText;
             } catch (IllegalFormatConversionException e) {
