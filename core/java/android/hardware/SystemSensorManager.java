@@ -244,7 +244,7 @@ public class SystemSensorManager extends SensorManager {
 
 	if (sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
 		String opPkgName = mContext.getOpPackageName();
-		if ("com.google.android.gms".equals(opPkgName) {
+		if ("com.google.android.gms".equals(opPkgName)) {
 			return true;
 		}
 	}
