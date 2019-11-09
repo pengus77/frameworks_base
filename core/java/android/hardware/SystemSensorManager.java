@@ -36,6 +36,7 @@ import dalvik.system.CloseGuard;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.lang.ref.WeakReference;
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -166,13 +167,6 @@ public class SystemSensorManager extends SensorManager {
 		return true;
 	}
 
-	if (sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-		String opPkgName = mContext.getOpPackageName();
-                if("com.google.android.gms".equals(opPkgName)) {
-			return true;
-		}
-	}
-
         // Invariants to preserve:
         // - one Looper per SensorEventListener
         // - one Looper per SensorEventQueue
@@ -240,13 +234,6 @@ public class SystemSensorManager extends SensorManager {
 
 	if (sensor.getType() == Sensor.TYPE_SIGNIFICANT_MOTION) {
 		return true;
-	}
-
-	if (sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-		String opPkgName = mContext.getOpPackageName();
-		if ("com.google.android.gms".equals(opPkgName)) {
-			return true;
-		}
 	}
 
         synchronized (mTriggerListeners) {
