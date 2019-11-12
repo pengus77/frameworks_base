@@ -162,17 +162,6 @@ public class SystemSensorManager extends SensorManager {
                 + MAX_LISTENER_COUNT);
         }
 
-	if (sensor.getType() == Sensor.TYPE_SIGNIFICANT_MOTION) {
-		return true;
-	}
-
-	if (sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-		String opPkgName = mContext.getOpPackageName();
-                if("com.google.android.gms".equals(opPkgName)) {
-			return true;
-		}
-	}
-
         // Invariants to preserve:
         // - one Looper per SensorEventListener
         // - one Looper per SensorEventQueue
@@ -237,17 +226,6 @@ public class SystemSensorManager extends SensorManager {
                     + "the trigger listeners size has exceeded the maximum limit "
                     + MAX_LISTENER_COUNT);
         }
-
-	if (sensor.getType() == Sensor.TYPE_SIGNIFICANT_MOTION) {
-		return true;
-	}
-
-	if (sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-		String opPkgName = mContext.getOpPackageName();
-		if ("com.google.android.gms".equals(opPkgName) {
-			return true;
-		}
-	}
 
         synchronized (mTriggerListeners) {
             TriggerEventQueue queue = mTriggerListeners.get(listener);
