@@ -391,7 +391,7 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
         }
 
         if (mIsDreaming) {
-            mParams.x += mDreamingOffsetX;
+            //mParams.x += mDreamingOffsetX;
             mParams.y += mDreamingOffsetY;
         }
 
