@@ -27,6 +27,7 @@ import com.android.systemui.plugins.qs.QSTile;
 import com.android.systemui.plugins.qs.QSTileView;
 import com.android.systemui.qs.QSHost;
 import com.android.systemui.qs.external.CustomTile;
+import com.android.systemui.qs.tiles.AdbTile;
 import com.android.systemui.qs.tiles.AirplaneModeTile;
 import com.android.systemui.qs.tiles.AODTile;
 import com.android.systemui.qs.tiles.BatterySaverTile;
@@ -89,6 +90,7 @@ public class QSFactoryImpl implements QSFactory {
 
     // Additions
     private final Provider<AODTile> mAODTileProvider;
+    private final Provider<AdbTile> mAdbTileProvider;
     private final Provider<CaffeineTile> mCaffeineTileProvider;
     private final Provider<DataSwitchTile> mDataSwitchTileProvider;
     private final Provider<SyncTile> mSyncTileProvider;
@@ -121,6 +123,7 @@ public class QSFactoryImpl implements QSFactory {
             Provider<UiModeNightTile> uiModeNightTileProvider,
             Provider<ScreenRecordTile> screenRecordTileProvider,
             Provider<AODTile> aodTileProvider,
+            Provider<AdbTile> adbTileProvider,
             Provider<CaffeineTile> caffeineTileProvider,
             Provider<DataSwitchTile> dataSwitchTileProvider,
             Provider<SyncTile> syncTileProvider,
@@ -151,6 +154,7 @@ public class QSFactoryImpl implements QSFactory {
 
         //Additions
         mAODTileProvider = aodTileProvider;
+        mAdbTileProvider = adbTileProvider;
         mCaffeineTileProvider = caffeineTileProvider;
         mDataSwitchTileProvider = dataSwitchTileProvider;
         mSyncTileProvider = syncTileProvider;
@@ -211,6 +215,8 @@ public class QSFactoryImpl implements QSFactory {
             // Additions
             case "aod":
                 return mAODTileProvider.get();
+	    case "adb":
+                return mAdbTileProvider.get();
             case "caffeine":
                 return mCaffeineTileProvider.get();
             case "dataswitch":

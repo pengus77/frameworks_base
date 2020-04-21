@@ -59,4 +59,7 @@
     <string name="global_action_restart_bootloader">Bootloader</string>
     <string name="global_action_restart_ui">SystemUI</string>
 
+    <!-- ADB QS Tile -->
+    <string name="quick_settings_adb_label">ADB</string>
+
 </resources>
