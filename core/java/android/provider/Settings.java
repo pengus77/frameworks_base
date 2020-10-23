@@ -9506,6 +9506,12 @@ public final class Settings {
         */
        public static final String FORCE_ALLOW_ON_EXTERNAL = "force_allow_on_external";
 
+       /**
+        * Whether signature spoofing is enabled or disabled for MicroG support. When this is true,
+        * packages can spoof their signature. WARNING, this can be dangerous. Use with caution.
+       */
+       public static final String FORCE_ENABLE_SIGNATURE_SPOOFING = "force_enable_signature_spoofing";
+
         /**
          * The default SM-DP+ configured for this device.
          *
