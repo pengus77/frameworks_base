@@ -151,9 +151,6 @@ public abstract class AuthenticationClient extends ClientMonitor {
             if (authenticated) {
                 mAlreadyDone = true;
 
-                if (listener != null) {
-                    vibrateSuccess();
-                }
                 result = true;
                 if (shouldFrameworkHandleLockout()) {
                     resetFailedAttempts();

@@ -76,9 +76,6 @@ public abstract class EnrollClient extends ClientMonitor {
      */
     private boolean sendEnrollResult(BiometricAuthenticator.Identifier identifier,
             int remaining) {
-        if (shouldVibrate()) {
-            vibrateSuccess();
-        }
         mMetricsLogger.action(mConstants.actionBiometricEnroll());
         try {
             final BiometricServiceBase.ServiceListener listener = getListener();
