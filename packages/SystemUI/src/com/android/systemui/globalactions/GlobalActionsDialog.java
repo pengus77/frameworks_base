@@ -999,7 +999,7 @@ public class GlobalActionsDialog implements DialogInterface.OnDismissListener,
         public boolean shouldShow() {
           // Include screenshot in power menu for legacy nav because it is not accessible
           // through Recents in that mode
-            return is2ButtonNavigationEnabled();
+            return true; // is2ButtonNavigationEnabled();
         }
 
         boolean is2ButtonNavigationEnabled() {
