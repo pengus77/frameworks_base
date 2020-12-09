@@ -43,6 +43,7 @@ import android.hardware.biometrics.BiometricSourceType;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.util.Log;
 import android.util.MathUtils;
 import android.view.GestureDetector;
@@ -114,6 +115,7 @@ import com.android.systemui.statusbar.policy.KeyguardStateController;
 import com.android.systemui.statusbar.policy.KeyguardUserSwitcher;
 import com.android.systemui.statusbar.policy.OnHeadsUpChangedListener;
 import com.android.systemui.statusbar.policy.ZenModeController;
+import com.android.systemui.tuner.TunerService;
 import com.android.systemui.util.InjectionInflationController;
 
 import java.io.FileDescriptor;
@@ -256,6 +258,7 @@ public class NotificationPanelViewController extends PanelViewController {
     private final ConversationNotificationManager mConversationNotificationManager;
     private final MediaHierarchyManager mMediaHierarchyManager;
     private final StatusBarKeyguardViewManager mStatusBarKeyguardViewManager;
+    private final TunerService mTunerService;
 
     private KeyguardAffordanceHelper mAffordanceHelper;
     private KeyguardUserSwitcher mKeyguardUserSwitcher;
@@ -500,7 +503,8 @@ public class NotificationPanelViewController extends PanelViewController {
             ConversationNotificationManager conversationNotificationManager,
             MediaHierarchyManager mediaHierarchyManager,
             BiometricUnlockController biometricUnlockController,
-            StatusBarKeyguardViewManager statusBarKeyguardViewManager) {
+            StatusBarKeyguardViewManager statusBarKeyguardViewManager,
+            TunerService tunerService) {
         super(view, falsingManager, dozeLog, keyguardStateController,
                 (SysuiStatusBarStateController) statusBarStateController, vibratorHelper,
                 latencyTracker, flingAnimationUtilsBuilder, statusBarTouchableRegionManager);
@@ -512,6 +516,7 @@ public class NotificationPanelViewController extends PanelViewController {
         mFlingAnimationUtilsBuilder = flingAnimationUtilsBuilder;
         mMediaHierarchyManager = mediaHierarchyManager;
         mStatusBarKeyguardViewManager = statusBarKeyguardViewManager;
+        mTunerService = tunerService;
         mView.setWillNotDraw(!DEBUG);
         mInjectionInflationController = injectionInflationController;
         mFalsingManager = falsingManager;
@@ -3618,7 +3623,8 @@ public class NotificationPanelViewController extends PanelViewController {
         }
     }
 
-    private class OnAttachStateChangeListener implements View.OnAttachStateChangeListener {
+    private class OnAttachStateChangeListener implements View.OnAttachStateChangeListener,
+            TunerService.Tunable {
         @Override
         public void onViewAttachedToWindow(View v) {
             FragmentHostManager.get(mView).addTagListener(QS.TAG, mFragmentListener);
@@ -3639,6 +3645,7 @@ public class NotificationPanelViewController extends PanelViewController {
             mStatusBarStateController.removeCallback(mStatusBarStateListener);
             mZenModeController.removeCallback(mZenModeControllerCallback);
             mConfigurationController.removeCallback(mConfigurationListener);
+            mTunerService.removeTunable(this);
             mUpdateMonitor.removeCallback(mKeyguardUpdateCallback);
         }
 
