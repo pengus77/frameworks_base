@@ -86,19 +86,6 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
 
     private Timer mBurnInProtectionTimer;
 
-    private IFingerprintInscreenCallback mFingerprintInscreenCallback =
-            new IFingerprintInscreenCallback.Stub() {
-        @Override
-        public void onFingerDown() {
-            mHandler.post(() -> showCircle());
-        }
-
-        @Override
-        public void onFingerUp() {
-            mHandler.post(() -> hideCircle());
-        }
-    };
-
     private KeyguardUpdateMonitor mUpdateMonitor;
 
     private KeyguardUpdateMonitorCallback mMonitorCallback = new KeyguardUpdateMonitorCallback() {
@@ -149,14 +136,6 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
                 updateMonitor.getStrongAuthTracker();
         int strongAuth = strongAuthTracker.getStrongAuthForUser(currentUser);
         if (biometrics && !strongAuthTracker.hasUserAuthenticatedSinceBoot()) {
-            return false;
-        } else if (biometrics && (strongAuth & STRONG_AUTH_REQUIRED_AFTER_TIMEOUT) != 0) {
-            return false;
-        } else if (biometrics && (strongAuth & STRONG_AUTH_REQUIRED_AFTER_DPM_LOCK_NOW) != 0) {
-            return false;
-        } else if (biometrics && (strongAuth & STRONG_AUTH_REQUIRED_AFTER_LOCKOUT) != 0) {
-            return false;
-        } else if (biometrics && (strongAuth & STRONG_AUTH_REQUIRED_AFTER_USER_LOCKDOWN) != 0) {
             return false;
         }
         return true;
@@ -271,7 +250,6 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
             try {
                 mFingerprintInscreenDaemon = IFingerprintInscreen.getService();
                 if (mFingerprintInscreenDaemon != null) {
-                    mFingerprintInscreenDaemon.setCallback(mFingerprintInscreenCallback);
                     mFingerprintInscreenDaemon.asBinder().linkToDeath((cookie) -> {
                         mFingerprintInscreenDaemon = null;
                     }, 0);
@@ -433,13 +411,8 @@ public class FODCircleView extends ImageView implements ConfigurationListener {
                 // do nothing
             }
 
-            if (mShouldBoostBrightness) {
-                mParams.screenBrightness = 1.0f;
-            }
-
             mParams.dimAmount = dimAmount / 255.0f;
         } else {
-            mParams.screenBrightness = 0.0f;
             mParams.dimAmount = 0.0f;
         }
 
