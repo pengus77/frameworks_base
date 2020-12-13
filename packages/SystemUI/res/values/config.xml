@@ -202,6 +202,9 @@
          always-on display) -->
     <string name="doze_brightness_sensor_type" translatable="false"></string>
 
+    <!-- Whether usage of the proximity sensor during doze is supported -->
+    <bool name="doze_proximity_sensor_supported">true</bool>
+
     <!-- Override value to use for proximity sensor.  -->
     <string name="proximity_sensor_type" translatable="false"></string>
 

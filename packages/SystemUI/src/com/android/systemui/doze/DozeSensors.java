@@ -47,6 +47,7 @@ import com.android.internal.logging.UiEventLogger;
 import com.android.internal.logging.UiEventLoggerImpl;
 import com.android.internal.logging.nano.MetricsProto;
 import com.android.systemui.plugins.SensorManagerPlugin;
+import com.android.systemui.R;
 import com.android.systemui.statusbar.phone.DozeParameters;
 import com.android.systemui.util.sensors.AsyncSensorManager;
 import com.android.systemui.util.sensors.ProximitySensor;
@@ -111,7 +112,12 @@ public class DozeSensors {
         mProxCallback = proxCallback;
         mResolver = mContext.getContentResolver();
         mCallback = callback;
-        mProximitySensor = proximitySensor;
+
+        if (context.getResources().getBoolean(R.bool.doze_proximity_sensor_supported)) {
+            mProximitySensor = proximitySensor;
+        } else {
+            mProximitySensor = null;
+        }
 
         boolean alwaysOn = mConfig.alwaysOnEnabled(UserHandle.USER_CURRENT);
         mSensors = new TriggerSensor[] {
@@ -174,13 +180,15 @@ public class DozeSensors {
                         dozeLog),
         };
 
-        setProxListening(false);  // Don't immediately start listening when we register.
-        mProximitySensor.register(
-                proximityEvent -> {
-                    if (proximityEvent != null) {
-                        mProxCallback.accept(!proximityEvent.getBelow());
-                    }
-                });
+        if (mProximitySensor != null) {
+            setProxListening(false);  // Don't immediately start listening when we register.
+            mProximitySensor.register(
+                    proximityEvent -> {
+                        if (proximityEvent != null) {
+                            mProxCallback.accept(!proximityEvent.getBelow());
+                        }
+                    });
+        }
     }
 
     /**
@@ -191,7 +199,10 @@ public class DozeSensors {
         for (TriggerSensor triggerSensor : mSensors) {
             triggerSensor.setListening(false);
         }
-        mProximitySensor.pause();
+
+        if (mProximitySensor != null) {
+            mProximitySensor.pause();
+        }
     }
 
     /**
@@ -268,20 +279,24 @@ public class DozeSensors {
     }
 
     void onScreenState(int state) {
-        mProximitySensor.setSecondarySafe(
-                state == Display.STATE_DOZE
-                || state == Display.STATE_DOZE_SUSPEND
-                || state == Display.STATE_OFF);
+        if (mProximitySensor != null) {
+            mProximitySensor.setSecondarySafe(
+                    state == Display.STATE_DOZE
+                    || state == Display.STATE_DOZE_SUSPEND
+                    || state == Display.STATE_OFF);
+        }
     }
 
     public void setProxListening(boolean listen) {
-        if (mProximitySensor.isRegistered() && listen) {
-            mProximitySensor.alertListeners();
-        } else {
-            if (listen) {
-                mProximitySensor.resume();
+        if (mProximitySensor != null) {
+            if (mProximitySensor.isRegistered() && listen) {
+                mProximitySensor.alertListeners();
             } else {
-                mProximitySensor.pause();
+                if (listen) {
+                    mProximitySensor.resume();
+                } else {
+                    mProximitySensor.pause();
+                }
             }
         }
     }
@@ -312,14 +327,20 @@ public class DozeSensors {
         for (TriggerSensor s : mSensors) {
             pw.println("  Sensor: " + s.toString());
         }
-        pw.println("  ProxSensor: " + mProximitySensor.toString());
+
+        if (mProximitySensor != null) {
+            pw.println("  ProxSensor: " + mProximitySensor.toString());
+        }
     }
 
     /**
      * @return true if prox is currently near, false if far or null if unknown.
      */
     public Boolean isProximityCurrentlyNear() {
-        return mProximitySensor.isNear();
+        if (mProximitySensor != null) {
+            return mProximitySensor.isNear();
+        }
+        return false;
     }
 
     @VisibleForTesting
