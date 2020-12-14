@@ -195,7 +195,7 @@ public class KeyguardViewMediator extends SystemUI implements Dumpable {
      * turning on the keyguard (i.e, the user has this much time to turn
      * the screen back on without having to face the keyguard).
      */
-    private static final int KEYGUARD_LOCK_AFTER_DELAY_DEFAULT = 5000;
+    private static final int KEYGUARD_LOCK_AFTER_DELAY_DEFAULT = 2000;
 
     /**
      * How long we'll wait for the {@link ViewMediatorCallback#keyguardDoneDrawing()}
@@ -954,7 +954,7 @@ public class KeyguardViewMediator extends SystemUI implements Dumpable {
             }
 
             if (mPendingLock) {
-                doKeyguardLocked(null);
+                doKeyguardLaterLocked();
                 mPendingLock = false;
             }
 
