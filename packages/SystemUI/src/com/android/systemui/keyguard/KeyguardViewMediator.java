@@ -41,6 +41,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.pm.UserInfo;
 import android.hardware.biometrics.BiometricSourceType;
+import android.hardware.face.FaceManager;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
@@ -195,7 +196,7 @@ public class KeyguardViewMediator extends SystemUI implements Dumpable {
      * turning on the keyguard (i.e, the user has this much time to turn
      * the screen back on without having to face the keyguard).
      */
-    private static final int KEYGUARD_LOCK_AFTER_DELAY_DEFAULT = 2000;
+    private static final int KEYGUARD_LOCK_AFTER_DELAY_DEFAULT = 5000;
 
     /**
      * How long we'll wait for the {@link ViewMediatorCallback#keyguardDoneDrawing()}
@@ -382,6 +383,7 @@ public class KeyguardViewMediator extends SystemUI implements Dumpable {
     private CharSequence mCustomMessage;
 
     private boolean mHasFod;
+    private FaceManager mFaceManager;
 
     private final DeviceConfig.OnPropertiesChangedListener mOnPropertiesChangedListener =
             new DeviceConfig.OnPropertiesChangedListener() {
@@ -752,6 +754,12 @@ public class KeyguardViewMediator extends SystemUI implements Dumpable {
                     mInGestureNavigationMode = QuickStepContract.isGesturalMode(mode);
                 }));
         mHasFod = mContext.getResources().getBoolean(com.android.internal.R.bool.config_needCustomFODView);
+        
+        if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_FACE)) {
+            mFaceManager = (FaceManager) context.getSystemService(Context.FACE_SERVICE);
+        } else {
+            mFaceManager = null;
+        }
     }
 
     public void userActivity() {
@@ -954,7 +962,27 @@ public class KeyguardViewMediator extends SystemUI implements Dumpable {
             }
 
             if (mPendingLock) {
-                doKeyguardLaterLocked();
+                boolean needsDelay = false; 
+                if (mFaceManager != null) {
+                    final int userId = KeyguardUpdateMonitor.getCurrentUser();
+                    final boolean faceUnlockEnabled = (mFaceManager.getEnrolledFaces(userId).size() > 0);
+                    if (faceUnlockEnabled) {
+                        final ContentResolver cr = mContext.getContentResolver();
+                        final boolean dozeEnabled = Settings.Secure.getIntForUser(cr, 
+                                Settings.Secure.DOZE_ENABLED, 0, userId) == 1;
+                        final boolean faceUnlockSkipsLockscreen = Settings.Secure.getIntForUser(cr,
+                                Settings.Secure.FACE_UNLOCK_DISMISSES_KEYGUARD, 0, userId) == 1;
+
+                        if (dozeEnabled && faceUnlockSkipsLockscreen)
+                            needsDelay = true;
+                    }
+                }
+
+                if (needsDelay) {
+                    doKeyguardLaterLocked(1500);
+                } else {
+                    doKeyguardLocked(null);
+                }
                 mPendingLock = false;
             }
 
