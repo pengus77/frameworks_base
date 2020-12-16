@@ -962,7 +962,7 @@ public class KeyguardViewMediator extends SystemUI implements Dumpable {
             }
 
             if (mPendingLock) {
-                boolean needsDelay = false; 
+                boolean needsFixedDelay = false; 
                 if (mFaceManager != null) {
                     final int userId = KeyguardUpdateMonitor.getCurrentUser();
                     final boolean faceUnlockEnabled = (mFaceManager.getEnrolledFaces(userId).size() > 0);
@@ -974,14 +974,14 @@ public class KeyguardViewMediator extends SystemUI implements Dumpable {
                                 Settings.Secure.FACE_UNLOCK_DISMISSES_KEYGUARD, 0, userId) == 1;
 
                         if (dozeEnabled && faceUnlockSkipsLockscreen)
-                            needsDelay = true;
+                            needsFixedDelay = true;
                     }
                 }
 
-                if (needsDelay) {
-                    doKeyguardLaterLocked(1500);
+                if (needsFixedDelay) {
+                    doKeyguardLaterLockedWithMinTimeout(1500);
                 } else {
-                    doKeyguardLocked(null);
+                    doKeyguardLaterLocked();
                 }
                 mPendingLock = false;
             }
@@ -1029,6 +1029,14 @@ public class KeyguardViewMediator extends SystemUI implements Dumpable {
             timeout = Math.max(timeout, 0);
         }
         return timeout;
+    }
+
+    private void doKeyguardLaterLockedWithMinTimeout(long minTimeout) {
+        long timeout = getLockTimeout(KeyguardUpdateMonitor.getCurrentUser());
+        if (timeout == 0) {
+            timeout = minTimeout;
+        }
+        doKeyguardLaterLocked(timeout);
     }
 
     private void doKeyguardLaterLocked() {
