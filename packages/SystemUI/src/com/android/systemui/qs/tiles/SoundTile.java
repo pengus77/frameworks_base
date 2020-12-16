@@ -100,7 +100,7 @@ public class SoundTile extends QSTileImpl<BooleanState> {
                 break;
             case AudioManager.RINGER_MODE_VIBRATE:
                 newState = AudioManager.RINGER_MODE_SILENT;
-                mZenController.setZen(Global.ZEN_MODE_ALARMS, null, TAG);
+                mAudioManager.setRingerModeInternal(newState);
                 break;
             case AudioManager.RINGER_MODE_SILENT:
                 newState = AudioManager.RINGER_MODE_NORMAL;
@@ -134,9 +134,9 @@ public class SoundTile extends QSTileImpl<BooleanState> {
                 break;
             case AudioManager.RINGER_MODE_SILENT:
                 state.icon = ResourceIcon.get(R.drawable.ic_qs_ringer_silent);
-                state.label = mContext.getString(R.string.quick_settings_sound_dnd);
+                state.label = mContext.getString(R.string.quick_settings_sound_silent);
                 state.contentDescription =  mContext.getString(
-                        R.string.quick_settings_sound_dnd);
+                        R.string.quick_settings_sound_silent);
                 break;
             default:
                 break;
