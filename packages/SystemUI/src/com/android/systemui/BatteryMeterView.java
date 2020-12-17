@@ -443,7 +443,7 @@ public class BatteryMeterView extends LinearLayout implements
                         LayoutParams.MATCH_PARENT);
 
                 if (mBatteryIconView == null) {
-                    mBatteryPercentView.setPadding(-4, 0, 0, 0);
+                    mBatteryPercentView.setPadding(0, 0, 0, 0);
                 }
 
                 addView(mBatteryPercentView, layoutParams);
