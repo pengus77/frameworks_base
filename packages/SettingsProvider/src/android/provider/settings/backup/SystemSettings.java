@@ -78,6 +78,7 @@ public class SystemSettings {
         Settings.System.NOTIFICATION_SOUND,
         Settings.System.ACCELEROMETER_ROTATION,
         Settings.System.SHOW_BATTERY_PERCENT,
+        Settings.System.SHOW_BATTERY_ICON,
         Settings.System.NOTIFICATION_VIBRATION_INTENSITY,
         Settings.System.RING_VIBRATION_INTENSITY,
         Settings.System.HAPTIC_FEEDBACK_INTENSITY,
