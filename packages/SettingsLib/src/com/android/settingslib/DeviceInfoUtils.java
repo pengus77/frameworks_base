@@ -153,21 +153,24 @@ public class DeviceInfoUtils {
         return null;
     }
 
-    public static String getSecurityPatch() {
-        String patch = Build.VERSION.SECURITY_PATCH;
-        if (!"".equals(patch)) {
+    public static String formatIsoDate(String date) {
+        if (date != null && !"".equals(date)) {
             try {
                 SimpleDateFormat template = new SimpleDateFormat("yyyy-MM-dd");
-                Date patchDate = template.parse(patch);
+                Date patchDate = template.parse(date);
                 String format = DateFormat.getBestDateTimePattern(Locale.getDefault(), "dMMMMyyyy");
-                patch = DateFormat.format(format, patchDate).toString();
+                return DateFormat.format(format, patchDate).toString();
             } catch (ParseException e) {
                 // broken parse; fall through and use the raw string
             }
-            return patch;
-        } else {
-            return null;
+            return date;
         }
+        return null;
+    }
+
+    public static String getSecurityPatch() {
+        String patch = Build.VERSION.SECURITY_PATCH;
+        return formatIsoDate(patch);
     }
 
     /**
