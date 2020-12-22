@@ -30,6 +30,7 @@ LOCAL_REQUIRED_MODULES := \
 	AccentColorAmethystOverlay \
 	AccentColorAquamarineOverlay \
 	AccentColorTangerineOverlay \
+	AccentColorMonteCarloOverlay \
 	FontNotoSerifSourceOverlay \
 	IconPackCircularAndroidOverlay \
 	IconPackCircularLauncherOverlay \
