@@ -129,7 +129,7 @@ public class TileLayout extends ViewGroup implements QSTileLayout {
                     Settings.System.QS_COLUMNS_PORTRAIT, mResourceColumns,
                     UserHandle.USER_CURRENT);
             rows = Settings.System.getIntForUser(mContext.getContentResolver(),
-                    Settings.System.QS_ROWS_PORTRAIT, 3,
+                    Settings.System.QS_ROWS_PORTRAIT, 2,
                     UserHandle.USER_CURRENT);
         } else {
             columns = Settings.System.getIntForUser(resolver,
