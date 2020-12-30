@@ -176,7 +176,7 @@ public final class LineageButtons {
             Resources res = mContext.getResources();
 
             mVolBtnMusicControls = Settings.System.getIntForUser(
-                    resolver, Settings.System.VOLUME_BUTTON_MUSIC_CONTROL, 1,
+                    resolver, Settings.System.VOLUME_BUTTON_MUSIC_CONTROL, 0,
                     UserHandle.USER_CURRENT) == 1;
         }
     }
